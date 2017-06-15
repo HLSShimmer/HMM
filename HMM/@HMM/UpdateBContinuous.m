@@ -23,6 +23,7 @@ for i=1:observeLength
             temp(j,k) = mvnpdf(obj.observeSequence(i,:),obj.HMMstruct.B.mu{j}(k,:),obj.HMMstruct.B.sigma{j}(:,:,k));
         end
     end
+    temp(temp==0) = 1e-60;
     %calculate current gammaSaparate
     gammaSaparate(:,:,i) = repmat(obj.gamma(i,:).'/sum(obj.gamma(i,:)),1,mixtureNum);
     temp = obj.HMMstruct.B.weights.*temp;

@@ -25,4 +25,5 @@ elseif strcmp(obj.HMMstruct.observePDFType,'CONTINUOUS_GAUSSIAN')
     for i=1:length(stateIndex)
         observeSequenceProbability(:,i) = obj.HMMstruct.B.PDF{stateIndex(i)}.pdf(obj.observeSequence(timeIndex));
     end
+%     observeSequenceProbability(observeSequenceProbability<eps*eps) = eps*eps;   %the minimum value is eps*eps, in order to avoid the zero result
 end

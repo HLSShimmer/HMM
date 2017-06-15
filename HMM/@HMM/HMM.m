@@ -17,7 +17,7 @@ classdef HMM
     %% constructor
     methods
         function obj = HMM()
-            obj.HMMstruct = struct('N',0,'M',0,'A',0,'B',0,'initialStateProbability',0,'observePDFType',0);
+            obj.HMMstruct = struct('N',0,'M',0,'A',0,'B',0,'initialStateProbability',0,'observePDFType',0,'transitMatrixType',0);
             obj.optPara = struct('maxIter',1000,'tolerance',1e-3);
             obj.observeSequence = [];
             obj.alpha = [];
@@ -34,7 +34,7 @@ classdef HMM
         %get model function
         HMMstruct = GetModel(obj);
         %model optimization function
-        [obj,HMMstruct,residual,flag] = ModelOptimization(obj,observeSequence,stateSequence);
+        [obj,HMMstruct,stateEstimated,flag,residual] = ModelOptimization(obj,observeSequence,stateSequence);
         %most likely individual state in timeIndex given by the model and observe sequence
         [stateIndex,stateProbability] = MostLikelyIndividualState(obj,observeSequence,timeIndex);
         %get alpha function
@@ -53,6 +53,10 @@ classdef HMM
         [forwardResult,backwardResult] = GetForwardBackward(obj,observeSequence);
         %get observe discrete probability distribution or pdf for each state
         observePDF = GetObservePDF(obj,observeSpan);
+        %get stationary probability of each state
+        stationaryProbability = GetStationaryProbability(obj);
+        %get joint probability between two state in consecutive
+        jointProbability = GetJointProbability(obj);
     end
     %% private methods
     methods (Access = 'private')
@@ -62,11 +66,14 @@ classdef HMM
         obj = CalculateBeta(obj);
         %forward and bcanward procedure
         obj = ForwardBackwardProcedure(obj);
+        obj = ForwardBackwardProcedure2(obj);
         %given the model and observe sequence, get the probability when state is i at time n
         obj = CalculateGamma(obj);
         %get probability or pdf of the observance at n given by the state
         observeSequenceProbability = GetObserveProbability(obj,stateIndex,timeIndex);
+        %calculate update information, A, B, ¦Ð
+        [A,B,initialStateProbability] = CalculateUpdateInformation(obj);
         %update the GMM struct, used in each iteration of baum-welch algo
-        B = UpdateBContinuous(B,gamma);
+        B = UpdateBContinuous(obj);
     end
 end

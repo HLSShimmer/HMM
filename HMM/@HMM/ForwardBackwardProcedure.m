@@ -1,7 +1,7 @@
 function obj = ForwardBackwardProcedure(obj)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% forward and backward procedure
-%%% calculate the needed ¦Ãand ¦Î in Baum-Welch Algorithm
+%%%% calculate the needed ¦Ãand ¦Î in Baum-Welch Algorithm
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % obj           input&output    object
 % gamma         output          probability of state at n given by the entire observe sequence
